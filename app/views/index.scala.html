@@ -1,0 +1,27 @@
+@(dates: Seq[NodeReading])
+
+@main("Sensor data", ReadingDateHelper.currentRangeString) {
+<table class="table table-hover">
+    <caption>
+        Current node readings
+    </caption>
+    <thead>
+        <tr>
+            <th>Node Id</th>
+            <th>Temperature (C)</th>
+            <th>Battery voltage (volts)</th>
+            <th>Uptime (hours)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(date <- dates) {
+            <tr>
+                <td>@{date.nodeId}</td>
+                <td>@{date.temperature}</td>
+                <td>@{date.voltage}</td>
+                <td>@{date.uptime / 10000000.0}</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
