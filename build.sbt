@@ -19,3 +19,10 @@ resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 
 fork in run := false
+
+import com.typesafe.sbt.SbtNativePackager.Linux
+import NativePackagerKeys._
+
+maintainer in Linux := "Filip Kofron <filip.kofron.cz@gmail.com>"
+packageSummary in Linux := "DragonSensors web server"
+packageDescription := "DragonSensors provides our private web server containing temperature readings from bearded dragon terraria."
