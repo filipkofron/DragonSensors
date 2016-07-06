@@ -23,6 +23,11 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class DataInController @Inject()(nodeReadingStore: NodeReadingStore, actorSystem: ActorSystem)(implicit exec: ExecutionContext) extends Controller
 {
+	def checkData(reading: NodeReading) =
+		reading.nodeId >= 0 && reading.nodeId <= 256 &&
+		  reading.temperature >= 0.0 && reading.temperature <= 100.0 &&
+		  reading.voltage >= 0.0 && reading.voltage <= 10.0
+
 	def addData = Action
 	{
 		request =>
@@ -37,7 +42,9 @@ class DataInController @Inject()(nodeReadingStore: NodeReadingStore, actorSystem
 				(dev \ "Voltage").text.toFloat,
 				DateTime.now().getMillis) // by default the time is received immediatelly
 
-			nodeReadingStore.add(reading)
+			if (checkData(reading))
+				nodeReadingStore.add(reading)
+
 			Ok(reading.toString)
 	}
 
@@ -55,7 +62,9 @@ class DataInController @Inject()(nodeReadingStore: NodeReadingStore, actorSystem
 				(dev \ "Voltage").text.toFloat,
 				time) // when importing data, we want to specify the time explicitly
 
-			nodeReadingStore.add(reading)
+			if (checkData(reading))
+				nodeReadingStore.add(reading)
+
 			Ok(reading.toString)
 	}
 }
